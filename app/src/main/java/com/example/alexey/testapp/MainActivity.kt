@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.example.alexey.testapp.model.Article
 import com.example.alexey.testapp.model.Category
+import com.example.alexey.testapp.restservice.SearchRepository
+import com.example.alexey.testapp.restservice.SearchRepositoryProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,25 +18,46 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    val repository: SearchRepository = SearchRepositoryProvider.provideSearchRepositoty()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+
         nav_view.setNavigationItemSelectedListener(this)
 
-        val restApi = ApiFactory.getRestApiService()
-                .getDateCategory("football")
-        restApi.observeOn(AndroidSchedulers.mainThread())
+        repository.searchCategory("football")
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         { ok(it) },
                         { errorFill(it)}
                 )
+        repository.searchArticle("/2018/03/27/prognoz-i-stavki-na-match-sevilja-barselona-31-03-2018")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        { ok1(it) },
+                        { errorFill(it)}
+                )
+//        val restApi = ApiFactory.getRestApiService()
+//                .getDateCategory("football")
+//        restApi.observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(
+//                        { ok(it) },
+//                        { errorFill(it)}
+//                )
         if(savedInstanceState == null) {
             nav_view.menu.getItem(1).isChecked = true
             onNavigationItemSelected(nav_view.menu.getItem(1))
         }
+    }
+
+    private fun ok1(it: Article?) {
+        Log.d(TAG, it?.place)
     }
 
     private fun errorFill(it: Throwable?) {
