@@ -39,10 +39,12 @@ class MyAdapter(private val clickListener: (Event) -> Unit):
                      private val clickListener: (Event) -> Unit):
             RecyclerView.ViewHolder(itemView) {
         val tv_title = itemView.findViewById<TextView>(R.id.tv_title)
+        val tv_place = itemView.findViewById<TextView>(R.id.tv_place)
 
         fun bind(event: Event) {
             with(event) {
                 tv_title.text = title
+                tv_place.text = place
             }
             itemView.setOnClickListener { clickListener(event) }
         }
