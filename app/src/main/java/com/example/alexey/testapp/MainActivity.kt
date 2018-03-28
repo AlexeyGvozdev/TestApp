@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.example.alexey.testapp.model.Category
+import com.example.alexey.testapp.model.Event
 import com.example.alexey.testapp.restservice.SearchRepository
 import com.example.alexey.testapp.restservice.SearchRepositoryProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,12 +17,17 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val repository: SearchRepository = SearchRepositoryProvider.provideSearchRepositoty()
-    private val adapter = MyAdapter({ toast(it.title) })
+    private val adapter = MyAdapter({ openArticleActivity(it) })
+
+    private fun openArticleActivity(event: Event) {
+        startActivity<ArticleActivity>(ArticleActivity.KEY_ARTICLE to event.article)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun errorFill(it: Throwable?) {
         Log.d(TAG, it.toString())
+        toast(it.toString())
     }
 
     val TAG = "TAG"

@@ -1,7 +1,7 @@
 package com.example.alexey.testapp.model
 
 
-class Article(val team1: String,
+data class Article(val team1: String,
               val team2: String,
               val time: String,
               val place: String,

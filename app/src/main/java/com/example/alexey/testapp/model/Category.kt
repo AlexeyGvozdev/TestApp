@@ -7,5 +7,5 @@ data class Event(val title: String,
                val coefficient: String,
                val place: String,
                val preview: String,
-               val acricle: String,
+               val article: String,
                val keyCategory: String)
