@@ -1,8 +1,6 @@
 package com.example.alexey.testapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.Loader
@@ -28,6 +26,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var globalCategotyName: String = ""
 
     private fun openArticleActivity(event: Event) {
+        // отправляем в активити данные о новости(ссыдку для get запроса
         startActivity<ArticleActivity>(ArticleActivity.KEY_ARTICLE to event.article)
     }
 
@@ -97,12 +96,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
+        //определение индекса выбранной категории
         for (i in 0..(nav_view.menu.size() - 1)) {
             if(nav_view.menu.getItem(i).itemId == item.itemId) {
                 idCheckedCategory = i
             }
         }
         showProgress()
+        //в адаптер подаётся пустой список, чтобы очистить экран от данных
         adapter.setListEvents(emptyList())
         globalCategotyName = item.title.toString()
         loadEvents(false, idCheckedCategory, item.title.toString())
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    //загрузка данных с сервера через Loader
     private fun loadEvents(restart: Boolean, itemId: Int, categoryName: String) {
 
 
@@ -125,11 +127,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     inner class EventsCallback(private val categoryName: String) : LoaderManager.LoaderCallbacks<List<Event>> {
         override fun onLoaderReset(loader: Loader<List<Event>>?) {   }
         override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<Event>> = RetrofitLoader(this@MainActivity, categoryName)
-        override fun onLoadFinished(loader: Loader<List<Event>>?, data: List<Event>) { showEvents(data) }
+        override fun onLoadFinished(loader: Loader<List<Event>>?, data: List<Event>?) { showEvents(data) }
     }
 
-    private fun showEvents(listEvent: List<Event>) {
-        adapter.setListEvents(listEvent)
+    private fun showEvents(listEvent: List<Event>?) {
+        if(listEvent != null) {
+            adapter.setListEvents(listEvent)
+        }
         refresh.isRefreshing = false
         hideProgress()
     }

@@ -23,6 +23,7 @@ class ArticleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_article)
 
         if(savedInstanceState == null) {
+            //получение ссылки на новость
             val articleFromIntent: String? = intent.getStringExtra(KEY_ARTICLE)
             if (articleFromIntent != null) {
                 repository.searchArticle(articleFromIntent)

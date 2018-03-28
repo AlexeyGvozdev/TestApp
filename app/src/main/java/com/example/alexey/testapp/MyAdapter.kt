@@ -1,8 +1,6 @@
 package com.example.alexey.testapp
 
-/**
- * Created by alexey on 28.03.18.
- */
+
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

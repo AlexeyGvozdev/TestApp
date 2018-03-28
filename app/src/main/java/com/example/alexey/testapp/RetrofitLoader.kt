@@ -41,6 +41,7 @@ class RetrofitLoader(context: Context, private val categoryName: String) : Loade
 
     private fun errorLoad(it: Throwable?) {
         Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
+        deliverResult(null)
     }
 
     private fun returnListEvents(it: Category?) {
