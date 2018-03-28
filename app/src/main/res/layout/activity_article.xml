@@ -7,6 +7,12 @@
     android:layout_height="match_parent"
     tools:context="com.example.alexey.testapp.ArticleActivity">
 
+    <ProgressBar
+        android:id="@+id/progress_arcticle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/tv_team1"

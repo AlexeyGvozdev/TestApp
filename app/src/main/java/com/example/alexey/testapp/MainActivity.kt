@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.example.alexey.testapp.model.Event
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -98,11 +98,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         for (i in 0..(nav_view.menu.size() - 1)) {
-            Log.d(TAG, "id ${item.itemId} : " + nav_view.menu.getItem(i))
             if(nav_view.menu.getItem(i).itemId == item.itemId) {
                 idCheckedCategory = i
             }
         }
+        showProgress()
+        adapter.setListEvents(emptyList())
         globalCategotyName = item.title.toString()
         loadEvents(false, idCheckedCategory, item.title.toString())
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -110,7 +111,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun loadEvents(restart: Boolean, itemId: Int, categoryName: String) {
-        Log.d(TAG, "NENF ${itemId}")
 
 
         val callbacks: LoaderManager.LoaderCallbacks<List<Event>> = EventsCallback(categoryName)
@@ -131,5 +131,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun showEvents(listEvent: List<Event>) {
         adapter.setListEvents(listEvent)
         refresh.isRefreshing = false
+        hideProgress()
+    }
+
+    private fun showProgress() {
+        progress_events.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        progress_events.visibility = View.GONE
     }
 }
