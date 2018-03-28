@@ -40,11 +40,13 @@ class MyAdapter(private val clickListener: (Event) -> Unit):
             RecyclerView.ViewHolder(itemView) {
         val tv_title = itemView.findViewById<TextView>(R.id.tv_title)
         val tv_place = itemView.findViewById<TextView>(R.id.tv_place)
+        val tv_coefficient = itemView.findViewById<TextView>(R.id.tv_coefficient)
 
         fun bind(event: Event) {
             with(event) {
                 tv_title.text = title
                 tv_place.text = place
+                tv_coefficient.text = coefficient
             }
             itemView.setOnClickListener { clickListener(event) }
         }

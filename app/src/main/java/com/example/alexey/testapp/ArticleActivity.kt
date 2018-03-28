@@ -56,6 +56,8 @@ class ArticleActivity : AppCompatActivity() {
         progress_arcticle.visibility = View.GONE
         tv_team1.text = article?.team1
         tv_team2.text = article?.team2
+        tv_place_arcticle.text = article?.place
+        tv_time_arcticle.text = article?.time
     }
 
 
