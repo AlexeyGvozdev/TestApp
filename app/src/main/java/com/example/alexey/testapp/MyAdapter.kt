@@ -39,12 +39,14 @@ class MyAdapter(private val clickListener: (Event) -> Unit):
         val tv_title = itemView.findViewById<TextView>(R.id.tv_title)
         val tv_place = itemView.findViewById<TextView>(R.id.tv_place)
         val tv_coefficient = itemView.findViewById<TextView>(R.id.tv_coefficient)
+        val tv_preview = itemView.findViewById<TextView>(R.id.tv_preview)
 
         fun bind(event: Event) {
             with(event) {
                 tv_title.text = title
                 tv_place.text = place
                 tv_coefficient.text = coefficient
+                tv_preview.text = preview
             }
             itemView.setOnClickListener { clickListener(event) }
         }

@@ -31,5 +31,12 @@
             android:layout_below="@id/tv_place"
             android:layout_marginTop="5dp"/>
 
+        <TextView
+            android:id="@+id/tv_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_coefficient"
+            android:layout_marginTop="5dp"/>
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>
