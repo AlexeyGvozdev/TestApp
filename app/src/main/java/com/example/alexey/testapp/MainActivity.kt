@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import com.example.alexey.testapp.model.Article
 import com.example.alexey.testapp.model.Category
 import com.example.alexey.testapp.restservice.SearchRepository
 import com.example.alexey.testapp.restservice.SearchRepositoryProvider
@@ -15,50 +15,31 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    val repository: SearchRepository = SearchRepositoryProvider.provideSearchRepositoty()
+    private val repository: SearchRepository = SearchRepositoryProvider.provideSearchRepositoty()
+    private val adapter = MyAdapter({ toast(it.title) })
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-
         nav_view.setNavigationItemSelectedListener(this)
 
-        repository.searchCategory("football")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        { ok(it) },
-                        { errorFill(it)}
-                )
-        repository.searchArticle("/2018/03/27/prognoz-i-stavki-na-match-sevilja-barselona-31-03-2018")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        { ok1(it) },
-                        { errorFill(it)}
-                )
-//        val restApi = ApiFactory.getRestApiService()
-//                .getDateCategory("football")
-//        restApi.observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(
-//                        { ok(it) },
-//                        { errorFill(it)}
-//                )
         if(savedInstanceState == null) {
             nav_view.menu.getItem(1).isChecked = true
             onNavigationItemSelected(nav_view.menu.getItem(1))
         }
+        recycler_view.adapter = adapter
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.setHasFixedSize(true)
     }
 
-    private fun ok1(it: Article?) {
-        Log.d(TAG, it?.place)
-    }
 
     private fun errorFill(it: Throwable?) {
         Log.d(TAG, it.toString())
@@ -66,7 +47,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     val TAG = "TAG"
     private fun ok(it: Category) {
-        Log.d(TAG, it.events.get(0).toString() + "gmhgmbhbv\nmbm")
+        adapter.setListEvents(it.events)
+        Log.d(TAG, it.events[0].toString() + "gmhgmbhbv\nmbm")
     }
 
     override fun onBackPressed() {
@@ -94,28 +76,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
 
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
-            }
-        }
-
+        repository.searchCategory(item.title.toString())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        { ok(it) },
+                        { errorFill(it)}
+                )
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
