@@ -55,10 +55,18 @@ class ArticleActivity : AppCompatActivity() {
 
     private fun showArcticle(article: Article?) {
         progress_arcticle.visibility = View.GONE
+
         tv_team1.text = article?.team1
         tv_team2.text = article?.team2
         tv_place_arcticle.text = article?.place
         tv_time_arcticle.text = article?.time
+        tv_header1.text = article?.article?.get(0)?.header
+        tv_text1.text = article?.article?.get(0)?.text
+        tv_header2.text = article?.article?.get(1)?.header
+        tv_text2.text = article?.article?.get(1)?.text
+        tv_header3.text = article?.article?.get(2)?.header
+        tv_text3.text = article?.article?.get(2)?.text
+        tv_prediction.text = article?.prediction
     }
 
 
